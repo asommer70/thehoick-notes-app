@@ -22,10 +22,15 @@ class NoteCard extends Component {
     // this.title = trimmedTitle;
     this.title = this.note.get('title');
 
-    // Truncate the note.text property.
-    var trimmedText = this.note.get('text').substr(0, 17);
-    trimmedText = trimmedText.substr(0, Math.min(trimmedText.length, trimmedText.lastIndexOf(" ")))
-    this.text = trimmedText;
+    // // Truncate the note.text property.
+    // var trimmedText = this.note.get('text').substr(0, 17);
+    // trimmedText = trimmedText.substr(0, Math.min(trimmedText.length, trimmedText.lastIndexOf(" ")))
+    // this.text = trimmedText;
+    if (this.note.get('text').length > 20) {
+      this.text = this.note.get('text').substring(0, 20) + '...';
+    } else {
+      this.text = this.note.get('text');
+    }
 
     this.created_at = `${this.note.createdAt.getMonth() + 1}-${this.note.createdAt.getDate() - 1}-${this.note.createdAt.getFullYear()}`;
   }

@@ -5,6 +5,7 @@ import React, {
   Text,
   TextInput,
   ScrollView,
+  ListView,
   StyleSheet
 } from 'react-native';
 import NavigationBar from 'react-native-navbar';
@@ -20,13 +21,15 @@ class Notes extends Component {
   constructor(props) {
     super(props);
     this.props = props;
-    this.state = {notes: []};
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
+    this.state = {notes: [], dataSource: ds.cloneWithRows([])};
 
     store.getNotes(props.navigator.username, (error, notes) => {
       if (error) {
         console.log('Notes store.getNotes error:', error);
       }
-      this.setState({notes});
+      this.setState({dataSource: ds.cloneWithRows(notes)});
     });
   }
 
@@ -48,18 +51,15 @@ class Notes extends Component {
           style={styles.navBarStyle}
           rightButton={rightButtonConfig} />
 
-        <ScrollView
-          automaticallyAdjustContentInsets={true}
-          onScroll={() => { console.log('onScroll!'); }}
-          scrollEventThrottle={200}
-          style={styles.scroll}>
-
-          <View style={styles.cards}>
-            {this.state.notes.map((note) => {
-              return <NoteCard key={note.id} note={note} navigator={this.props.navigator} />
-            })}
-          </View>
-        </ScrollView>
+          <ListView contentContainerStyle={styles.list}
+            dataSource={this.state.dataSource}
+            renderRow={(rowData) => <View style={styles.item}>
+              <View style={styles.cards}>
+                <NoteCard key={rowData.id} note={rowData} navigator={this.props.navigator} />
+              </View>
+            </View>
+            }
+          />
       </View>
     )
   }
@@ -68,26 +68,27 @@ class Notes extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    // paddingTop: 40,
-    // alignItems: 'center',
+
     backgroundColor: '#F5F7FA',
   },
 
-  scroll: {
-    height: 900,
-    flexDirection: 'row',
-    // borderWidth: 1,
-    marginTop: 10,
-    backgroundColor: '#F5F7FA'
+  centerWrapper: {
+    justifyContent: 'center',
+    marginTop: 40,
   },
 
-  cards: {
-    flexDirection: 'row',
-  },
 
   navBarStyle: {
     backgroundColor: '#F5F7FA',
+  },
+
+  list: {
+    flexDirection: 'row',
+    flexWrap: 'wrap'
+  },
+  item: {
+    margin: 10,
+    width: 130,
   }
 });
 
