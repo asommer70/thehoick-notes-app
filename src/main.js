@@ -6,6 +6,8 @@ import Notes from './components/notes';
 import Note from './components/note';
 import NoteForm from './components/note_form';
 
+window.navigator.userAgent = "react-native";
+
 var ROUTES = {
   signin: Signin,
   signup: Signup,

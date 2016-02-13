@@ -13,6 +13,8 @@ const store = new Store();
 var Button = require('./button');
 var NavButton = require('./nav_button');
 
+var io = require('socket.io-client/socket.io');
+
 class NoteForm extends Component {
   constructor(props) {
     super(props);
@@ -38,6 +40,18 @@ class NoteForm extends Component {
         });
       });
     }
+
+    // Setup the socket.
+    this.socket = io.connect('http://localhost:7070', {jsonp: false});
+
+    // Listen for 'text-entered' event.
+    this.socket.on('text-entered', (obj) => {
+      console.log('txt:', obj.txt, 'name:', obj.name);
+
+      var newState = {};
+      newState[obj.name] = obj.txt;
+      this.setState(newState);
+    });
   }
 
   saveNote(event) {
@@ -64,10 +78,6 @@ class NoteForm extends Component {
             console.log('saveNote updated note:', note);
             this.setState({note});
             console.log('this.props:', this.props);
-            // this.props.history.push(`/notes/${note.id}`);
-            // this.props.navigator.replacePrevious({name: 'note'});
-            // this.props.navigator.pop();
-            // this.props.navigator.jumpTo({name: 'note'});
             this.props.navigator.immediatelyResetRouteStack([{name: 'notes'}, {name: 'note'}]);
           });
         })
@@ -79,9 +89,6 @@ class NoteForm extends Component {
           console.log('saveNote updated note:', note);
           this.setState({note});
           console.log('this.props:', this.props);
-          // this.props.history.push(`/notes/${note.id}`);
-          // this.props.navigator.replacePrevious({name: 'note'});
-          // this.props.navigator.pop();
           this.props.navigator.immediatelyResetRouteStack([{name: 'notes'}, {name: 'note'}]);
         });
       }
@@ -135,7 +142,7 @@ class NoteForm extends Component {
         <TextInput
           style={styles.input}
           value={this.state.title}
-          onChangeText={(text) => this.setState({title: text})}
+          onChangeText={(text) => this.socket.emit('text-entered', {txt: text, name: 'title'})}
           />
 
         <Text style={styles.label}>Text:</Text>
@@ -144,7 +151,7 @@ class NoteForm extends Component {
           style={styles.textBox}
           value={this.state.text}
           multiline={true}
-          onChangeText={(text) => this.setState({text: text})}
+          onChangeText={(text) => this.socket.emit('text-entered', {txt: text, name: 'text'})}
           />
 
         <Text style={styles.label}>{this.state.errorMessage}</Text>
@@ -162,7 +169,6 @@ class NoteForm extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems: 'center',
     backgroundColor: '#F5F7FA',
   },
 
