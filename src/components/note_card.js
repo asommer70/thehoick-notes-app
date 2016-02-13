@@ -60,10 +60,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 10,
     shadowColor: '#424242',
-    shadowOffset: {width: 0, height: 5},
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.7,
-    shadowRadius: 5,
-    elevation: 3,
+    shadowRadius: 2,
+    elevation: 1,
     width: 130,
     margin: 10
   },
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
-    color: 'blue'
+    color: '#3CCFDF'
   },
 
   hr: {

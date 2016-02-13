@@ -7,10 +7,12 @@ import React, {
   ScrollView,
   StyleSheet
 } from 'react-native';
+import NavigationBar from 'react-native-navbar';
 
 import NoteCard from './note_card';
 import Store from '../lib/store';
 var store = new Store();
+var NavButton = require('./nav_button');
 
 class Note extends Component {
   constructor(props) {
@@ -35,23 +37,46 @@ class Note extends Component {
     });
   }
 
+  goBack(event) {
+    this.props.navigator.pop();
+  }
+
   render() {
+    const rightButtonConfig = <NavButton text={'Edit'} onPress={event => console.log('pressed...')} />;
+    const leftButtonConfig = <NavButton text={'Back'} onPress={event => this.goBack(event)} />;
+
+    const titleConfig = {
+      title: 'The Hoick Notes',
+      style: {
+        backgroundColor: '#eeeeee'
+      }
+    };
+
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>{this.state.title}</Text>
+        <NavigationBar
+          title={titleConfig}
+          style={styles.navBarStyle}
+          rightButton={rightButtonConfig}
+          leftButton={leftButtonConfig} />
 
-        <ScrollView
-          automaticallyAdjustContentInsets={false}
-          onScroll={() => { console.log('onScroll!'); }}
-          scrollEventThrottle={200}
-          style={styles.scroll}>
+        <View style={styles.centerWrapper}>
+          <View style={styles.noteDeets}>
+            <Text style={styles.title}>{this.state.title}</Text>
 
-          <Text style={styles.text}>{this.state.text}</Text>
-        </ScrollView>
+            <ScrollView
+              automaticallyAdjustContentInsets={false}
+              onScroll={() => { console.log('onScroll!'); }}
+              scrollEventThrottle={200}
+              style={styles.scroll}>
+              <Text style={styles.text}>{this.state.text}</Text>
+            </ScrollView>
 
-        <View style={styles.rowView}>
-          <Text style={styles.createdBy}>@{this.state.created_by}</Text>
-          <Text style={styles.info}>{this.state.created_at}</Text>
+            <View style={styles.rowView}>
+              <Text style={styles.createdBy}>@{this.state.created_by}</Text>
+              <Text style={styles.info}>{this.state.created_at}</Text>
+            </View>
+          </View>
         </View>
       </View>
     )
@@ -61,10 +86,28 @@ class Note extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: 'center',
-    paddingTop: 40,
+    // alignItems: 'center',
+    backgroundColor: '#F5F7FA',
+  },
+
+  centerWrapper: {
     alignItems: 'center',
-    backgroundColor: '#eeeeee',
+  },
+
+  noteDeets: {
+    alignItems: 'center',
+    marginTop: 20,
+    width: 300,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#424242',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.7,
+    shadowRadius: 2,
+    elevation: 1,
+    backgroundColor: 'white',
+    // borderWidth: 1,
+    // marginLeft: 4,
   },
 
   title: {
@@ -74,9 +117,9 @@ const styles = StyleSheet.create({
   },
 
   scroll: {
-    height: 800,
+    height: 400,
     width: 250,
-    borderWidth: 1,
+    borderBottomWidth: 1,
     backgroundColor: 'white'
   },
 
@@ -101,6 +144,11 @@ const styles = StyleSheet.create({
   createdBy: {
     // marginTop: 10,
     marginRight: 10
+  },
+
+  navBarStyle: {
+    backgroundColor: '#F5F7FA',
+    alignItems: 'flex-start',
   }
 });
 

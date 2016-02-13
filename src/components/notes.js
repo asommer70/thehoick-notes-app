@@ -7,10 +7,14 @@ import React, {
   ScrollView,
   StyleSheet
 } from 'react-native';
+import NavigationBar from 'react-native-navbar';
 
 import NoteCard from './note_card';
 import Store from '../lib/store';
 var store = new Store();
+// var StatusBar = require('./status_bar');
+// import StatusBar from './status_bar';
+var NavButton = require('./nav_button');
 
 class Notes extends Component {
   constructor(props) {
@@ -27,8 +31,19 @@ class Notes extends Component {
   }
 
   render() {
+    const rightButtonConfig = <NavButton text={'New'} onPress={event => console.log('pressed...')} />;
+
+    const titleConfig = {
+      title: 'The Hoick Notes',
+    };
+
     return (
       <View style={styles.container}>
+        <NavigationBar
+          title={titleConfig}
+          style={styles.navBarStyle}
+          rightButton={rightButtonConfig} />
+
         <ScrollView
           automaticallyAdjustContentInsets={true}
           onScroll={() => { console.log('onScroll!'); }}
@@ -50,20 +65,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    paddingTop: 40,
+    // paddingTop: 40,
     // alignItems: 'center',
-    backgroundColor: '#eeeeee',
+    backgroundColor: '#F5F7FA',
   },
 
   scroll: {
     height: 900,
     flexDirection: 'row',
-    borderWidth: 1,
-    backgroundColor: 'yellow'
+    // borderWidth: 1,
+    marginTop: 10,
+    backgroundColor: '#F5F7FA'
   },
 
   cards: {
     flexDirection: 'row',
+  },
+
+  navBarStyle: {
+    backgroundColor: '#F5F7FA',
   }
 });
 
