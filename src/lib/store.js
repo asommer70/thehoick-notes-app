@@ -102,8 +102,8 @@ class Store {
     user.set('password', password);
 
     user.signUp(null, {
-      success: (user) => { t
-        callback(null, {user});
+      success: (user) => {
+        callback(null, user);
       },
       error: (user, error) => {
         callback(error, {status: error.status});

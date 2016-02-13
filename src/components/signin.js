@@ -40,6 +40,7 @@ class Signin extends Component {
       if (error) {
         this.setState({errorMessage: error.message});
       } else {
+        this.props.navigator.username = this.state.username;
         this.props.navigator.immediatelyResetRouteStack([{name: 'notes'}]);
       }
     })

@@ -15,7 +15,7 @@ class Notes extends Component {
     super(props);
     this.state = {notes: []};
 
-    store.getNotes(username, (error, notes) => {
+    store.getNotes(props.navigator.username, (error, notes) => {
       if (error) {
         console.log('Notes store.getNotes error:', error);
       }

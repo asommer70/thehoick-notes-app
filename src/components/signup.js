@@ -24,12 +24,12 @@ class Signup extends Component {
     this.state =  {
       username: '',
       password: '',
-      passwordConfirmation: '',
+      confirmPass: '',
       errorMessage: ''
     };
   }
 
-  signup() {
+  signUp() {
     console.log('signing up...');
     if (this.state.password !== this.state.confirmPass ) {
       return this.setState({errorMessage: 'Your passwords do not match', messageVisible: true});
@@ -39,7 +39,8 @@ class Signup extends Component {
       if (error) {
         this.setState({errorMessage: error.message});
       } else {
-        this.props.navigator.immediatelyResetRouteStack([{name: 'main'}]);
+        this.props.navigator.username = this.state.username;
+        this.props.navigator.immediatelyResetRouteStack([{name: 'notes'}]);
       }
     });
   }
@@ -69,8 +70,8 @@ class Signup extends Component {
         <Text style={styles.label}>Confirm Password:</Text>
         <TextInput
           secureTextEntry={true}
-          value={this.state.passwordConfirmation}
-          onChangeText={(text) => this.setState({passwordConfirmation: text})}
+          value={this.state.confirmPass}
+          onChangeText={(text) => this.setState({confirmPass: text})}
           style={styles.input} />
 
         <Text style={styles.label}>{this.state.errorMessage}</Text>
