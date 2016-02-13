@@ -13,6 +13,7 @@ const store = new Store();
 var Button = require('./button');
 var NavButton = require('./nav_button');
 
+window.navigator.userAgent = "react-native";
 var io = require('socket.io-client/socket.io');
 
 class NoteForm extends Component {
@@ -197,7 +198,6 @@ const styles = StyleSheet.create({
 
   textBox: {
     padding: 4,
-    height: 40,
     borderColor: '#DBDEE3',
     borderWidth: 1,
     borderRadius: 5,

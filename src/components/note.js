@@ -19,7 +19,7 @@ class Note extends Component {
   constructor(props) {
     super(props);
     this.props = props;
-    this.state = {id: '', title: '', text: '', users: [], tags: [], share: false, shareUser: '', sharing: false, shareUser: ''};
+    this.state = {id: '', title: '', text: '', users: [], tags: [], share: false, shareUser: '', sharing: false};
     console.log('note this.props:', this.props);
 
     store.findNote(this.props.navigator.noteId, (error, note) => {
@@ -159,7 +159,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
     width: 300,
-    alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#424242',
     shadowOffset: {width: 0, height: 2},
