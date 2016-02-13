@@ -16,16 +16,8 @@ class NoteCard extends Component {
     super(props);
     this.note = this.props.note;
 
-    // Truncate the note.title property.
-    // var trimmedTitle = this.note.get('title').substr(0, 14);
-    // trimmedTitle = trimmedTitle.substr(0, Math.min(trimmedTitle.length, trimmedTitle.lastIndexOf(" ")))
-    // this.title = trimmedTitle;
     this.title = this.note.get('title');
-
-    // // Truncate the note.text property.
-    // var trimmedText = this.note.get('text').substr(0, 17);
-    // trimmedText = trimmedText.substr(0, Math.min(trimmedText.length, trimmedText.lastIndexOf(" ")))
-    // this.text = trimmedText;
+    
     if (this.note.get('text').length > 20) {
       this.text = this.note.get('text').substring(0, 20) + '...';
     } else {
@@ -65,9 +57,9 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: 'white',
     padding: 10,
-    shadowColor: '#424242',
+    shadowColor: '#222324',
     shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.7,
+    shadowOpacity: 0.6,
     shadowRadius: 2,
     elevation: 1,
     width: 130,

@@ -13,8 +13,6 @@ import NavigationBar from 'react-native-navbar';
 import NoteCard from './note_card';
 import Store from '../lib/store';
 var store = new Store();
-// var StatusBar = require('./status_bar');
-// import StatusBar from './status_bar';
 var NavButton = require('./nav_button');
 
 class Notes extends Component {

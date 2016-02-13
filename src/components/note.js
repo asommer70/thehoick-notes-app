@@ -12,13 +12,14 @@ import NavigationBar from 'react-native-navbar';
 import NoteCard from './note_card';
 import Store from '../lib/store';
 var store = new Store();
+var Button = require('./button');
 var NavButton = require('./nav_button');
 
 class Note extends Component {
   constructor(props) {
     super(props);
     this.props = props;
-    this.state = {id: '', title: '', text: '', users: [], tags: [], share: false, shareUser: ''};
+    this.state = {id: '', title: '', text: '', users: [], tags: [], share: false, shareUser: '', sharing: false, shareUser: ''};
     console.log('note this.props:', this.props);
 
     store.findNote(this.props.navigator.noteId, (error, note) => {
@@ -45,6 +46,32 @@ class Note extends Component {
     props.navigator.push({name: 'note_form'});
   }
 
+  shareNote(event) {
+    if (this.state.users.indexOf(this.state.shareUser === -1)) {
+      var users = this.state.users;
+      users.push(this.state.shareUser);
+
+      this.setState({users: users}, (note) => {
+        store.updateNote(this.state, (error, note) => {
+          if (error) {
+            console.log('saveNote error:', error);
+          }
+          console.log('saveNote updated note:', note);
+          this.setState({
+            id: note.id,
+            title: note.get('title'),
+            text: note.get('text'),
+            users: note.get('users'),
+            tags: note.get('tags'),
+            sharing: false,
+            shareUser: ''
+          });
+          // this.props.history.push(`/notes/${note.id}`);
+        });
+      });
+    }
+  }
+
   render() {
     const rightButtonConfig = <NavButton text={'Edit'} onPress={event => this.editNote(this.props)} />;
     const leftButtonConfig = <NavButton text={'Back'} onPress={event => this.goBack(event)} />;
@@ -56,6 +83,16 @@ class Note extends Component {
       }
     };
 
+    if (this.state.sharing) {
+      var shareInput = <TextInput style={styles.input} value={this.state.shareUser} onChangeText={(text) => this.setState({shareUser: text})} />;
+      var shareButton = <Button text={'Share'} onPress={event => this.shareNote(this.props)} buttonStyle={styles.sharingButton} textStyle={styles.shareText} />;
+      var cancelButton = <Button text={'Cancel'} onPress={event => this.setState({sharing: false})} buttonStyle={styles.shareButton} textStyle={styles.shareText} />;
+    } else {
+      var shareInput = <View/>;
+      var shareButton = <View/>;
+      var cancelButton = <View/>;
+    }
+
     return (
       <View style={styles.container}>
         <NavigationBar
@@ -66,7 +103,21 @@ class Note extends Component {
 
         <View style={styles.centerWrapper}>
           <View style={styles.noteDeets}>
-            <Text style={styles.title}>{this.state.title}</Text>
+
+            <View style={styles.rowView}>
+              <Text style={styles.title}>{this.state.title}</Text>
+
+              <Button text={'Share'} onPress={event => this.setState({sharing: true})} buttonStyle={styles.shareButton} textStyle={styles.shareText}/>
+            </View>
+            <View style={styles.rowView}>
+
+              {shareInput}
+            </View>
+
+              <View style={styles.rowView}>
+              {shareButton}
+              {cancelButton}
+            </View>
 
             <ScrollView
               automaticallyAdjustContentInsets={false}
@@ -79,6 +130,12 @@ class Note extends Component {
             <View style={styles.rowView}>
               <Text style={styles.createdBy}>@{this.state.created_by}</Text>
               <Text style={styles.info}>{this.state.created_at}</Text>
+            </View>
+            <View style={styles.rowView}>
+              <Text>Users: </Text>
+              {this.state.users.map((user, index) => {
+                return <Text style={styles.users} key={index}>{user}</Text>
+              })}
             </View>
           </View>
         </View>
@@ -123,7 +180,7 @@ const styles = StyleSheet.create({
   },
 
   scroll: {
-    height: 400,
+    height: 320,
     width: 250,
     borderBottomWidth: 1,
     backgroundColor: 'white'
@@ -155,6 +212,56 @@ const styles = StyleSheet.create({
   navBarStyle: {
     backgroundColor: '#F5F7FA',
     alignItems: 'flex-start',
+  },
+
+  input: {
+    padding: 4,
+    height: 40,
+    borderColor: '#222324',
+    borderWidth: 1,
+    borderRadius: 5,
+    margin: 5,
+    width: 150,
+    alignSelf: 'center',
+    fontSize: 16,
+    backgroundColor: '#DBDEE3',
+    color: '#222324'
+  },
+
+  shareButton: {
+    borderColor: '#222324',
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 5,
+    marginTop: 10,
+    marginLeft: 40,
+    backgroundColor: 'white'
+  },
+
+  shareText: {
+    flex: 1,
+    alignSelf: 'center',
+    fontSize: 12,
+    color: '#222324'
+  },
+
+  sharingButton: {
+    borderColor: '#222324',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 5,
+    // marginTop: 10,
+    // marginLeft: 40,
+    backgroundColor: 'white'
+  },
+
+  users: {
+    marginLeft: 5,
+    marginRight: 5
   }
 });
 
