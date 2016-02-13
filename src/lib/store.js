@@ -73,6 +73,7 @@ class Store {
         callback(null, note);
       },
       error: (error) => {
+        console.log('store createNote error:', error);
         callback(error, null);
       }
     });

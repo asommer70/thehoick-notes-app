@@ -26,14 +26,16 @@ var styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     padding: 5,
-    borderColor: '#424242',
+    borderColor: '#DBDEE3',
     // marginTop: 10
     marginLeft: 3,
     marginRight: 3,
+    backgroundColor: 'white'
   },
   buttonText: {
     flex: 1,
     alignSelf: 'center',
-    fontSize: 12
+    fontSize: 12,
+    color: '#222324'
   }
 });

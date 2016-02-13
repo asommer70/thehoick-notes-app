@@ -30,11 +30,15 @@ class Notes extends Component {
     });
   }
 
+  newNote(props) {
+    this.props.navigator.push({name: 'note_form'});
+  }
+
   render() {
-    const rightButtonConfig = <NavButton text={'New'} onPress={event => console.log('pressed...')} />;
+    const rightButtonConfig = <NavButton text={'New'} onPress={event => this.newNote(this.props)} />;
 
     const titleConfig = {
-      title: 'The Hoick Notes',
+      title: 'Notes',
     };
 
     return (

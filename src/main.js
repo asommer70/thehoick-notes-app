@@ -4,11 +4,13 @@ import Signin from './components/signin';
 import Signup from './components/signup';
 import Notes from './components/notes';
 import Note from './components/note';
+import NoteForm from './components/note_form';
 
 var ROUTES = {
   signin: Signin,
   signup: Signup,
   note: Note,
+  note_form: NoteForm,
   notes: Notes
 };
 

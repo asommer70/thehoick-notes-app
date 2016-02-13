@@ -17,9 +17,10 @@ class NoteCard extends Component {
     this.note = this.props.note;
 
     // Truncate the note.title property.
-    var trimmedTitle = this.note.get('title').substr(0, 10);
-    trimmedTitle = trimmedTitle.substr(0, Math.min(trimmedTitle.length, trimmedTitle.lastIndexOf(" ")))
-    this.title = trimmedTitle;
+    // var trimmedTitle = this.note.get('title').substr(0, 14);
+    // trimmedTitle = trimmedTitle.substr(0, Math.min(trimmedTitle.length, trimmedTitle.lastIndexOf(" ")))
+    // this.title = trimmedTitle;
+    this.title = this.note.get('title');
 
     // Truncate the note.text property.
     var trimmedText = this.note.get('text').substr(0, 17);
@@ -76,8 +77,8 @@ const styles = StyleSheet.create({
   },
 
   hr: {
-    padding: 1,
-    backgroundColor: '#424242',
+    borderBottomWidth: 1,
+    borderColor: '#222324',
     width: 100,
     marginTop: 10,
     marginBottom: 10

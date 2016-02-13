@@ -41,14 +41,18 @@ class Note extends Component {
     this.props.navigator.pop();
   }
 
+  editNote(props) {
+    props.navigator.push({name: 'note_form'});
+  }
+
   render() {
-    const rightButtonConfig = <NavButton text={'Edit'} onPress={event => console.log('pressed...')} />;
+    const rightButtonConfig = <NavButton text={'Edit'} onPress={event => this.editNote(this.props)} />;
     const leftButtonConfig = <NavButton text={'Back'} onPress={event => this.goBack(event)} />;
 
     const titleConfig = {
-      title: 'The Hoick Notes',
+      title: 'Note',
       style: {
-        backgroundColor: '#eeeeee'
+        backgroundColor: '#F5F7FA'
       }
     };
 
@@ -114,6 +118,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: '#222324'
   },
 
   scroll: {
