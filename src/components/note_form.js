@@ -22,7 +22,12 @@ class NoteForm extends Component {
     console.log('this.props:', this.props);
     this.socket = props.socket;
 
-    this.state = {id: '', title: '', text: '', users: [this.props.navigator.username], tags: [], created_by: this.props.navigator.username, new: true};
+    this.state = {
+      id: '', title: '', text: '',
+      users: [this.props.navigator.username], tags: [],
+      created_by: this.props.navigator.username, new: true,
+      currentUsers: [props.navigator.username]
+    };
 
     // Get the route stack and check for name 'note' at position 1.
     const current = props.navigator.getCurrentRoutes()
@@ -50,6 +55,13 @@ class NoteForm extends Component {
         var newState = {};
         newState[obj.name] = obj.txt;
         this.setState(newState);
+
+        // Add the new Note user if it's they're not already in the list.
+        var currentUsers = this.state.currentUsers;
+        if (currentUsers.indexOf(obj.username) === -1) {
+          currentUsers.push(obj.username);
+          newState.currentUsers = currentUsers;
+        }
 
         // this.socket.emit('text-entered', {txt: obj.txt, name: obj.name, platform: obj.platform});
       }
@@ -111,12 +123,12 @@ class NoteForm extends Component {
 
   titleChanged(text) {
     this.setState({title: text});
-    this.socket.emit('text-entered', {txt: text, name: 'title', platform: 'ios'});
+    this.socket.emit('text-entered', {txt: text, name: 'title', platform: 'ios', username: this.props.navigator.username});
   }
 
   textChanged(text) {
     this.setState({text: text});
-    this.socket.emit('text-entered', {txt: text, name: 'text', platform: 'ios'});
+    this.socket.emit('text-entered', {txt: text, name: 'text', platform: 'ios', username: this.props.navigator.username});
   }
 
   render() {
@@ -167,6 +179,15 @@ class NoteForm extends Component {
           />
 
         <Text style={styles.label}>{this.state.errorMessage}</Text>
+
+        <View style={styles.rowWrapper}>
+          <Text style={styles.currentUsersLabel}>Current Users:</Text>
+          {this.state.currentUsers.map((user, index) => {
+            return <View key={index} style={styles.currentUsers}>
+              <Text style={styles.currentUsersText}>{user}</Text>
+            </View>
+          })}
+        </View>
 
         <View style={styles.rowWrapper}>
           <Button text={'Save Note'} onPress={event => this.saveNote(event)} buttonStyle={styles.saveButton} textStyle={styles.saveText}/>
@@ -274,6 +295,22 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#ED6C63'
   },
+
+  currentUsers: {
+    backgroundColor: '#FCE473',
+    padding: 3,
+    marginRight: 2,
+    marginLeft: 2
+  },
+
+  currentUsersText: {
+    color: '#7E7239',
+    fontSize: 10
+  },
+
+  currentUsersLabel: {
+    marginRight: 3
+  }
 });
 
 export default NoteForm;
