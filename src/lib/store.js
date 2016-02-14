@@ -5,7 +5,7 @@ const ServerNotes = Parse.Object.extend('notes');
 class Store {
   constructor() {
     Parse.initialize('com.thehoick.parse', 'jsHoickKey');
-    Parse.serverURL = 'http://localhost:7070/parse/';
+    Parse.serverURL = 'http://192.168.0.36:7070/parse/';
   }
 
   getNotes(username, callback) {

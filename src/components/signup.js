@@ -52,7 +52,7 @@ class Signup extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Sign Up</Text>
+        <Text style={styles.title}>The Hoick Sign Up</Text>
 
         <Text style={styles.label}>Username:</Text>
         <TextInput
@@ -74,7 +74,7 @@ class Signup extends Component {
           onChangeText={(text) => this.setState({confirmPass: text})}
           style={styles.input} />
 
-        <Text style={styles.label}>{this.state.errorMessage}</Text>
+        <Text style={styles.error}>{this.state.errorMessage}</Text>
         <Button text={'Signup'} onPress={this.signUp.bind(this)} />
         <Button text={'I have an account...'} onPress={this.onSigninPress.bind(this)} />
       </View>
@@ -89,9 +89,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white'
   },
+
+  title: {
+    fontSize: 22,
+    marginBottom: 20
+  },
+
   label: {
     fontSize: 18
   },
+
   input: {
     padding: 4,
     height: 40,
@@ -101,6 +108,11 @@ const styles = StyleSheet.create({
     margin: 5,
     width: 200,
     alignSelf: 'center'
+  },
+
+  error: {
+    color: '#ED6C63',
+    padding: 10
   }
 });
 

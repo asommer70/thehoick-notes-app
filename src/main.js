@@ -6,7 +6,7 @@ import Notes from './components/notes';
 import Note from './components/note';
 import NoteForm from './components/note_form';
 
-window.navigator.userAgent = "react-native";
+// window.navigator.userAgent = "react-native";
 
 var ROUTES = {
   signin: Signin,
@@ -16,6 +16,12 @@ var ROUTES = {
   notes: Notes
 };
 
+window.navigator.userAgent = "react-native";
+var io = require('socket.io-client/socket.io');
+
+// Setup the socket.
+socket = io.connect('http://192.168.0.36:7070', {jsonp: false});
+
 class Main extends Component {
   constructor(props) {
     super(props);
@@ -24,7 +30,7 @@ class Main extends Component {
   renderScene(route, navigator) {
     var Component = ROUTES[route.name]; // ROUTES['signin'] => Signin
     navigator.username = 'adam';
-    return <Component route={route} navigator={navigator} />;
+    return <Component route={route} navigator={navigator} socket={socket} />;
   }
 
   render() {

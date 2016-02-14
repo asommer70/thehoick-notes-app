@@ -102,13 +102,18 @@ class Note extends Component {
           leftButton={leftButtonConfig} />
 
         <View style={styles.centerWrapper}>
+          <ScrollView
+        automaticallyAdjustContentInsets={true}
+        style={styles.scrollBig}>
           <View style={styles.noteDeets}>
 
-            <View style={styles.rowView}>
+            <View style={styles.titleRow}>
               <Text style={styles.title}>{this.state.title}</Text>
 
               <Button text={'Share'} onPress={event => this.setState({sharing: true})} buttonStyle={styles.shareButton} textStyle={styles.shareText}/>
             </View>
+
+
             <View style={styles.rowView}>
 
               {shareInput}
@@ -119,13 +124,8 @@ class Note extends Component {
               {cancelButton}
             </View>
 
-            <ScrollView
-              automaticallyAdjustContentInsets={false}
-              onScroll={() => { console.log('onScroll!'); }}
-              scrollEventThrottle={200}
-              style={styles.scroll}>
-              <Text style={styles.text}>{this.state.text}</Text>
-            </ScrollView>
+
+            <Text style={styles.text}>{this.state.text}</Text>
 
             <View style={styles.rowView}>
               <Text style={styles.createdBy}>@{this.state.created_by}</Text>
@@ -138,6 +138,8 @@ class Note extends Component {
               })}
             </View>
           </View>
+        </ScrollView>
+
         </View>
       </View>
     )
@@ -153,6 +155,10 @@ const styles = StyleSheet.create({
 
   centerWrapper: {
     alignItems: 'center',
+  },
+
+  scrollBig: {
+    height: 500
   },
 
   noteDeets: {
@@ -175,7 +181,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     marginTop: 10,
-    color: '#222324'
+    color: '#222324',
+    width: 290,
+  },
+
+  titleRow: {
+    flexDirection: 'row',
+    padding: 5,
+    width: 290,
+    flexWrap: 'wrap'
   },
 
   scroll: {

@@ -10,14 +10,7 @@ import React, {
 import Store from '../lib/store';
 const store = new Store();
 
-if (React.Platform.OS == 'ios') {
-  var Button = require('./button');
-} else {
-  // import { Button } from 'react-native-material-design';
-  // import { typography } from 'react-native-material-design-styles';
-  // const typographyStyle = StyleSheet.create(typography);
-}
-
+var Button = require('./button');
 
 class Signin extends Component {
   constructor(props) {
@@ -49,7 +42,7 @@ class Signin extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Sign In</Text>
+        <Text style={styles.title}>The Hoick Sign In</Text>
 
         <Text style={styles.label}>Username:</Text>
         <TextInput
@@ -66,7 +59,8 @@ class Signin extends Component {
           onChangeText={(text) => this.setState({password: text})}
           />
 
-        <Text style={styles.label}>{this.state.errorMessage}</Text>
+        <Text style={styles.error}>{this.state.errorMessage}</Text>
+
         <Button text={'Sign In'} onPress={this.signIn.bind(this)} />
         <Button text={'I need an account...'} onPress={this.onSignupPress.bind(this)} />
 
@@ -79,8 +73,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: '#F5F7FA',
   },
+
+  title: {
+    fontSize: 22,
+    marginBottom: 20
+  },
+
   input: {
     padding: 4,
     height: 40,
@@ -91,8 +92,14 @@ const styles = StyleSheet.create({
     width: 200,
     alignSelf: 'center'
   },
+
   label: {
     fontSize: 18
+  },
+
+  error: {
+    color: '#ED6C63',
+    padding: 10
   }
 });
 

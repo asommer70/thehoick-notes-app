@@ -4,6 +4,7 @@ import React, {
   View,
   Text,
   TextInput,
+  ScrollView,
   StyleSheet
 } from 'react-native';
 import NavigationBar from 'react-native-navbar';
@@ -13,14 +14,13 @@ const store = new Store();
 var Button = require('./button');
 var NavButton = require('./nav_button');
 
-window.navigator.userAgent = "react-native";
-var io = require('socket.io-client/socket.io');
 
 class NoteForm extends Component {
   constructor(props) {
     super(props);
     this.props = props;
     console.log('this.props:', this.props);
+    this.socket = props.socket;
 
     this.state = {id: '', title: '', text: '', users: [this.props.navigator.username], tags: [], created_by: this.props.navigator.username, new: true};
 
@@ -42,16 +42,14 @@ class NoteForm extends Component {
       });
     }
 
-    // Setup the socket.
-    this.socket = io.connect('http://localhost:7070', {jsonp: false});
-
     // Listen for 'text-entered' event.
     this.socket.on('text-entered', (obj) => {
-      console.log('txt:', obj.txt, 'name:', obj.name);
+      // console.log('txt:', obj.txt, 'name:', obj.name);
 
       var newState = {};
       newState[obj.name] = obj.txt;
       this.setState(newState);
+      // this.socket.emit('text-entered', {txt: obj.txt, name: obj.name});
     });
   }
 
@@ -108,6 +106,16 @@ class NoteForm extends Component {
     this.props.navigator.pop();
   }
 
+  titleChanged(text) {
+    // this.setState({title: text});
+    this.socket.emit('text-entered', {txt: text, name: 'title'});
+  }
+
+  textChanged(text) {
+    // this.setState({text: text});
+    this.socket.emit('text-entered', {txt: text, name: 'text'});
+  }
+
   render() {
     const leftButtonConfig = <NavButton text={'Back'} onPress={event => this.goBack(event)} />;
 
@@ -138,21 +146,21 @@ class NoteForm extends Component {
           style={styles.navBarStyle}
           leftButton={leftButtonConfig} />
 
+        <ScrollView scrollable={false}>
         <View style={styles.centerWrapper}>
         <Text style={styles.label}>Title:</Text>
         <TextInput
           style={styles.input}
           value={this.state.title}
-          onChangeText={(text) => this.socket.emit('text-entered', {txt: text, name: 'title'})}
+          onChangeText={(text) => this.titleChanged(text)}
           />
 
         <Text style={styles.label}>Text:</Text>
         <TextInput
-          secureTextEntry={true}
           style={styles.textBox}
           value={this.state.text}
           multiline={true}
-          onChangeText={(text) => this.socket.emit('text-entered', {txt: text, name: 'text'})}
+          onChangeText={(text) => this.textChanged(text)}
           />
 
         <Text style={styles.label}>{this.state.errorMessage}</Text>
@@ -162,6 +170,7 @@ class NoteForm extends Component {
           {delButton}
         </View>
         </View>
+      </ScrollView>
       </View>
     );
   }
@@ -180,6 +189,13 @@ const styles = StyleSheet.create({
 
   rowWrapper: {
     flexDirection: 'row'
+  },
+
+  scroll: {
+    height: 320,
+    width: 250,
+    borderBottomWidth: 1,
+    backgroundColor: 'white'
   },
 
   input: {
