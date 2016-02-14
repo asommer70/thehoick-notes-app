@@ -46,10 +46,13 @@ class NoteForm extends Component {
     this.socket.on('text-entered', (obj) => {
       // console.log('txt:', obj.txt, 'name:', obj.name);
 
-      var newState = {};
-      newState[obj.name] = obj.txt;
-      this.setState(newState);
-      // this.socket.emit('text-entered', {txt: obj.txt, name: obj.name});
+      if (obj.platform != 'ios') {
+        var newState = {};
+        newState[obj.name] = obj.txt;
+        this.setState(newState);
+
+        // this.socket.emit('text-entered', {txt: obj.txt, name: obj.name, platform: obj.platform});
+      }
     });
   }
 
@@ -107,13 +110,13 @@ class NoteForm extends Component {
   }
 
   titleChanged(text) {
-    // this.setState({title: text});
-    this.socket.emit('text-entered', {txt: text, name: 'title'});
+    this.setState({title: text});
+    this.socket.emit('text-entered', {txt: text, name: 'title', platform: 'ios'});
   }
 
   textChanged(text) {
-    // this.setState({text: text});
-    this.socket.emit('text-entered', {txt: text, name: 'text'});
+    this.setState({text: text});
+    this.socket.emit('text-entered', {txt: text, name: 'text', platform: 'ios'});
   }
 
   render() {
